@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #1a1f2e;
+    min-height: 100vh;
+    padding: 30px 20px;
+    color: #e2e8f0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #1e2538;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+header {
+    background: #131826;
+    color: #e2e8f0;
+    padding: 45px 30px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+header h1 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+    color: #f1f5f9;
+}
+
+header p {
+    font-size: 15px;
+    opacity: 0.7;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.search-section {
+    padding: 30px;
+    background: #1a1f2e;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+#repoInput {
+    flex: 1;
+    padding: 14px 18px;
+    font-size: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-family: inherit;
+    transition: all 0.2s;
+    background: #131826;
+    color: #e2e8f0;
+}
+
+#repoInput:focus {
+    outline: none;
+    border-color: #5b6e8c;
+    background: #0f1420;
+}
+
+#repoInput::placeholder {
+    color: #5a6c8a;
+}
+
+#analyzeBtn {
+    padding: 14px 32px;
+    background: #2d3a4e;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#analyzeBtn:hover {
+    background: #3e4e66;
+    transform: translateY(-1px);
+}
