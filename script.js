@@ -46,8 +46,9 @@ class GitHubHealthAnalyzer {
             const contributorsData = await this.fetchContributors(owner, repo);
             const releasesData = await this.fetchReleases(owner, repo);
 
+            const analysis = this.analyzeData(repoData, commitsData, issuesData, contributorsData, releasesData);
+            console.log('Analysis:', analysis);
             this.hideLoading();
-            console.log('Data fetched successfully');
         } catch (error) {
             this.hideLoading();
             this.showError(error.message);
@@ -95,6 +96,41 @@ class GitHubHealthAnalyzer {
 
     async fetchReleases(owner, repo) {
         return await this.fetchWithAuth(`${this.apiBase}/repos/${owner}/${repo}/releases`);
+    }
+
+    analyzeData(repoData, commits, issues, contributors, releases) {
+        const activityScore = this.calculateActivityScore(repoData, commits);
+        
+        return {
+            activityScore,
+            metrics: {
+                lastCommit: commits[0]?.commit?.author?.date || 'N/A',
+                commitCount: commits.length,
+                contributorCount: contributors.length,
+            }
+        };
+    }
+
+    calculateActivityScore(repoData, commits) {
+        if (!commits.length) return 0;
+
+        const lastCommit = new Date(commits[0].commit.author.date);
+        const daysSinceLastCommit = (Date.now() - lastCommit) / (1000 * 3600 * 24);
+        
+        let recencyScore;
+        if (daysSinceLastCommit <= 7) recencyScore = 100;
+        else if (daysSinceLastCommit <= 30) recencyScore = 80;
+        else if (daysSinceLastCommit <= 90) recencyScore = 50;
+        else recencyScore = 20;
+
+        let frequencyScore;
+        if (commits.length >= 100) frequencyScore = 100;
+        else if (commits.length >= 50) frequencyScore = 80;
+        else if (commits.length >= 20) frequencyScore = 60;
+        else if (commits.length >= 5) frequencyScore = 40;
+        else frequencyScore = 20;
+
+        return Math.round((recencyScore * 0.6) + (frequencyScore * 0.4));
     }
 
     showLoading() {
