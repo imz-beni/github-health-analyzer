@@ -11,6 +11,9 @@ class GitHubHealthAnalyzer {
         document.getElementById('repoInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.analyze();
         });
+        document.getElementById('tokenInput').addEventListener('change', (e) => {
+            this.token = e.target.value;
+        });
     }
 
     async analyze() {
@@ -33,6 +36,73 @@ class GitHubHealthAnalyzer {
             this.showError('Invalid repository format. Use "owner/repo" or full GitHub URL');
             return;
         }
+
+        this.showLoading();
+
+        try {
+            const repoData = await this.fetchRepoData(owner, repo);
+            const commitsData = await this.fetchCommits(owner, repo);
+            const issuesData = await this.fetchIssues(owner, repo);
+            const contributorsData = await this.fetchContributors(owner, repo);
+            const releasesData = await this.fetchReleases(owner, repo);
+
+            this.hideLoading();
+            console.log('Data fetched successfully');
+        } catch (error) {
+            this.hideLoading();
+            this.showError(error.message);
+        }
+    }
+
+    async fetchWithAuth(url) {
+        const headers = {};
+        if (this.token) {
+            headers['Authorization'] = `token ${this.token}`;
+        }
+
+        const response = await fetch(url, { headers });
+        
+        if (response.status === 404) {
+            throw new Error('Repository not found');
+        }
+        if (response.status === 403) {
+            throw new Error('Rate limit exceeded. Add a GitHub token or try again later');
+        }
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+
+        return response.json();
+    }
+
+    async fetchRepoData(owner, repo) {
+        return await this.fetchWithAuth(`${this.apiBase}/repos/${owner}/${repo}`);
+    }
+
+    async fetchCommits(owner, repo) {
+        return await this.fetchWithAuth(`${this.apiBase}/repos/${owner}/${repo}/commits?per_page=100`);
+    }
+
+    async fetchIssues(owner, repo) {
+        const url = `${this.apiBase}/repos/${owner}/${repo}/issues?state=all&per_page=100&filter=all`;
+        const issues = await this.fetchWithAuth(url);
+        return issues.filter(issue => !issue.pull_request);
+    }
+
+    async fetchContributors(owner, repo) {
+        return await this.fetchWithAuth(`${this.apiBase}/repos/${owner}/${repo}/contributors?per_page=100`);
+    }
+
+    async fetchReleases(owner, repo) {
+        return await this.fetchWithAuth(`${this.apiBase}/repos/${owner}/${repo}/releases`);
+    }
+
+    showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+
+    hideLoading() {
+        document.getElementById('loading').style.display = 'none';
     }
 
     showError(message) {
