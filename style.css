@@ -92,3 +92,87 @@ header p {
     background: #3e4e66;
     transform: translateY(-1px);
 }
+
+/* Info Box */
+.info-box {
+    background: #131826;
+    border-left: 3px solid #5b6e8c;
+    padding: 18px 22px;
+    margin: 0 30px 30px 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.info-box p {
+    margin-bottom: 12px;
+    color: #a0b3d9;
+    font-size: 14px;
+}
+
+.info-box a {
+    color: #8b9dc3;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.info-box a:hover {
+    color: #a0b3d9;
+    text-decoration: underline;
+}
+
+#tokenInput {
+    width: 100%;
+    padding: 10px 14px;
+    margin: 10px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    background: #0f1420;
+    color: #e2e8f0;
+}
+
+.info-box small {
+    display: block;
+    margin-top: 8px;
+    color: #6b7c9e;
+    font-size: 12px;
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 60px 30px;
+    background: #1a1f2e;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #8b9dc3;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading p {
+    color: #8b9dc3;
+    font-size: 14px;
+}
+
+/* Error State */
+.error {
+    background: #2a1f2c;
+    color: #d4a5a5;
+    padding: 14px 20px;
+    margin: 20px 30px;
+    border-radius: 12px;
+    border-left: 3px solid #b98c8c;
+    font-size: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
