@@ -9,17 +9,17 @@
 <body>
     <div class="container">
         <header>
-            <h1>GitHub Repository Health Analyzer</h1>
+            <h1>📊 GitHub Repository Health Analyzer</h1>
             <p>Analyze the health and maintainability of any public GitHub repository</p>
         </header>
 
         <div class="search-section">
             <input type="text" id="repoInput" placeholder="Enter repository (e.g., facebook/react or https://github.com/facebook/react)" />
-            <button id="analyzeBtn">Analyze Repository</button>
+            <button id="analyzeBtn">🔍 Analyze Repository</button>
         </div>
 
         <div class="info-box">
-            <p><strong>Tip:</strong> For better rate limits, get your <a href="https://github.com/settings/tokens" target="_blank">GitHub Personal Access Token</a> (no permissions needed) and add it below:</p>
+            <p>💡 <strong>Tip:</strong> For better rate limits, get your <a href="https://github.com/settings/tokens" target="_blank">GitHub Personal Access Token</a> (no permissions needed) and add it below:</p>
             <input type="password" id="tokenInput" placeholder="GitHub Token (optional, increases rate limit)" />
             <small>Without token: 60 requests/hour | With token: 5000 requests/hour</small>
         </div>
@@ -30,6 +30,106 @@
         </div>
 
         <div id="error" class="error" style="display: none;"></div>
+
+        <div id="results" style="display: none;">
+            <div class="health-score-card">
+                <h2>📈 Overall Health Score</h2>
+                <div class="score-circle" id="overallScore">0</div>
+                <div class="score-label" id="scoreLabel">Calculating...</div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>⚡ Activity Metrics</h3>
+                    <div class="metric">
+                        <span>Last Commit:</span>
+                        <span id="lastCommit">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>Commits (90 days):</span>
+                        <span id="commitCount">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>Contributors:</span>
+                        <span id="contributorCount">-</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="activityScore" style="width: 0%"></div>
+                    </div>
+                    <span id="activityScoreText" class="score-text">Score: 0%</span>
+                </div>
+
+                <div class="metric-card">
+                    <h3>👥 Community Health</h3>
+                    <div class="metric">
+                        <span>Open Issues:</span>
+                        <span id="openIssues">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>Closed Issues:</span>
+                        <span id="closedIssues">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>Issue Response Time:</span>
+                        <span id="responseTime">-</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="communityScore" style="width: 0%"></div>
+                    </div>
+                    <span id="communityScoreText" class="score-text">Score: 0%</span>
+                </div>
+
+                <div class="metric-card">
+                    <h3>📦 Project Maturity</h3>
+                    <div class="metric">
+                        <span>Repository Age:</span>
+                        <span id="repoAge">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>Latest Release:</span>
+                        <span id="latestRelease">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>Stars:</span>
+                        <span id="stars">-</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="maturityScore" style="width: 0%"></div>
+                    </div>
+                    <span id="maturityScoreText" class="score-text">Score: 0%</span>
+                </div>
+
+                <div class="metric-card">
+                    <h3>📝 Documentation</h3>
+                    <div class="metric">
+                        <span>README:</span>
+                        <span id="hasReadme">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>License:</span>
+                        <span id="hasLicense">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>Contributing Guide:</span>
+                        <span id="hasContributing">-</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="docsScore" style="width: 0%"></div>
+                    </div>
+                    <span id="docsScoreText" class="score-text">Score: 0%</span>
+                </div>
+            </div>
+
+            <div class="recommendations">
+                <h3>💡 Recommendations</h3>
+                <ul id="recommendationsList"></ul>
+            </div>
+
+            <div class="actions">
+                <button id="compareBtn" class="compare-btn">➕ Compare Another Repository</button>
+                <button id="exportBtn" class="export-btn">📄 Export Report</button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
