@@ -102,19 +102,26 @@ class GitHubHealthAnalyzer {
         const activityScore = this.calculateActivityScore(repoData, commits);
         const communityScore = this.calculateCommunityScore(issues);
         const maturityScore = this.calculateMaturityScore(repoData, releases);
+        const docsScore = this.calculateDocumentationScore(repoData);
         
         const overallScore = Math.round(
             (activityScore * 0.3) + 
             (communityScore * 0.3) + 
             (maturityScore * 0.2) + 
-            (50 * 0.2)
+            (docsScore * 0.2)
         );
+
+        const recommendations = this.generateRecommendations({
+            activityScore, communityScore, maturityScore, docsScore,
+            repoData, issues, commits, releases
+        });
 
         return {
             overallScore,
             activityScore,
             communityScore,
             maturityScore,
+            docsScore,
             metrics: {
                 lastCommit: commits[0]?.commit?.author?.date || 'N/A',
                 commitCount: commits.length,
@@ -125,7 +132,11 @@ class GitHubHealthAnalyzer {
                 repoAge: new Date(repoData.created_at),
                 latestRelease: releases[0]?.published_at || 'N/A',
                 stars: repoData.stargazers_count,
-            }
+                hasReadme: repoData.has_wiki ? '✅ Yes' : '❌ No',
+                hasLicense: repoData.license ? '✅ Yes' : '❌ No',
+                hasContributing: 'Not available via API'
+            },
+            recommendations
         };
     }
 
@@ -222,6 +233,46 @@ class GitHubHealthAnalyzer {
         const starsScore = Math.min(100, (repoData.stargazers_count / 1000) * 20);
 
         return Math.round((ageScore * 0.4) + (releaseScore * 0.4) + (starsScore * 0.2));
+    }
+
+    calculateDocumentationScore(repoData) {
+        let score = 0;
+        
+        if (repoData.description && repoData.description.length > 50) score += 30;
+        else if (repoData.description) score += 20;
+        
+        if (repoData.has_wiki) score += 25;
+        if (repoData.license) score += 25;
+        if (repoData.homepage) score += 20;
+        
+        return Math.min(100, score);
+    }
+
+    generateRecommendations(scores) {
+        const recommendations = [];
+        
+        if (scores.activityScore < 60) {
+            recommendations.push('Low activity detected. Consider looking for more actively maintained alternatives.');
+        }
+        if (scores.communityScore < 60) {
+            recommendations.push('Weak community engagement. Check if issues are being responded to promptly.');
+        }
+        if (scores.maturityScore < 60) {
+            recommendations.push('Project appears young or has low adoption. Evaluate stability requirements carefully.');
+        }
+        if (scores.docsScore < 70) {
+            recommendations.push('Documentation could be improved. Look for projects with better documentation.');
+        }
+        
+        if (scores.overallScore >= 80) {
+            recommendations.push('This appears to be a healthy, well-maintained project!');
+        } else if (scores.overallScore >= 60) {
+            recommendations.push('This project is reasonably healthy but has some areas for improvement.');
+        } else {
+            recommendations.push('This project shows signs of being unhealthy. Consider alternatives if possible.');
+        }
+        
+        return recommendations;
     }
 
     showLoading() {
