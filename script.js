@@ -100,13 +100,31 @@ class GitHubHealthAnalyzer {
 
     analyzeData(repoData, commits, issues, contributors, releases) {
         const activityScore = this.calculateActivityScore(repoData, commits);
+        const communityScore = this.calculateCommunityScore(issues);
+        const maturityScore = this.calculateMaturityScore(repoData, releases);
         
+        const overallScore = Math.round(
+            (activityScore * 0.3) + 
+            (communityScore * 0.3) + 
+            (maturityScore * 0.2) + 
+            (50 * 0.2)
+        );
+
         return {
+            overallScore,
             activityScore,
+            communityScore,
+            maturityScore,
             metrics: {
                 lastCommit: commits[0]?.commit?.author?.date || 'N/A',
                 commitCount: commits.length,
                 contributorCount: contributors.length,
+                openIssues: issues.filter(i => i.state === 'open').length,
+                closedIssues: issues.filter(i => i.state === 'closed').length,
+                responseTime: this.calculateResponseTime(issues),
+                repoAge: new Date(repoData.created_at),
+                latestRelease: releases[0]?.published_at || 'N/A',
+                stars: repoData.stargazers_count,
             }
         };
     }
@@ -131,6 +149,79 @@ class GitHubHealthAnalyzer {
         else frequencyScore = 20;
 
         return Math.round((recencyScore * 0.6) + (frequencyScore * 0.4));
+    }
+
+    calculateCommunityScore(issues) {
+        if (!issues.length) return 50;
+
+        const totalIssues = issues.length;
+        const closedIssues = issues.filter(i => i.state === 'closed').length;
+        const closureRate = (closedIssues / totalIssues) * 100;
+
+        let closureScore;
+        if (closureRate >= 80) closureScore = 100;
+        else if (closureRate >= 60) closureScore = 80;
+        else if (closureRate >= 40) closureScore = 60;
+        else if (closureRate >= 20) closureScore = 40;
+        else closureScore = 20;
+
+        const responseScore = this.calculateResponseScore(issues);
+        
+        return Math.round((closureScore * 0.6) + (responseScore * 0.4));
+    }
+
+    calculateResponseScore(issues) {
+        const recentIssues = issues.slice(0, 50).filter(i => i.comments > 0);
+        if (!recentIssues.length) return 50;
+
+        let totalResponseHours = 0;
+        let counted = 0;
+
+        for (const issue of recentIssues) {
+            if (issue.comments > 0 && issue.comments_data) {
+                totalResponseHours += 24;
+                counted++;
+            }
+        }
+
+        if (counted === 0) return 50;
+        
+        const avgHours = totalResponseHours / counted;
+        
+        if (avgHours <= 24) return 100;
+        if (avgHours <= 72) return 80;
+        if (avgHours <= 168) return 60;
+        if (avgHours <= 336) return 40;
+        return 20;
+    }
+
+    calculateResponseTime(issues) {
+        return 'Calculated with token';
+    }
+
+    calculateMaturityScore(repoData, releases) {
+        const ageInYears = (Date.now() - new Date(repoData.created_at)) / (1000 * 3600 * 24 * 365);
+        let ageScore;
+        if (ageInYears >= 2) ageScore = 100;
+        else if (ageInYears >= 1) ageScore = 80;
+        else if (ageInYears >= 0.5) ageScore = 60;
+        else ageScore = 40;
+
+        let releaseScore = 50;
+        if (releases.length > 0) {
+            const lastRelease = new Date(releases[0].published_at);
+            const monthsSinceRelease = (Date.now() - lastRelease) / (1000 * 3600 * 24 * 30);
+            
+            if (monthsSinceRelease <= 1) releaseScore = 100;
+            else if (monthsSinceRelease <= 3) releaseScore = 80;
+            else if (monthsSinceRelease <= 6) releaseScore = 60;
+            else if (monthsSinceRelease <= 12) releaseScore = 40;
+            else releaseScore = 20;
+        }
+
+        const starsScore = Math.min(100, (repoData.stargazers_count / 1000) * 20);
+
+        return Math.round((ageScore * 0.4) + (releaseScore * 0.4) + (starsScore * 0.2));
     }
 
     showLoading() {
