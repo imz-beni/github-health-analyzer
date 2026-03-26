@@ -176,3 +176,97 @@ header p {
     font-size: 14px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+/* Health Score Card */
+.health-score-card {
+    text-align: center;
+    padding: 45px 30px;
+    background: #131826;
+    margin: 30px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.health-score-card h2 {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 25px;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+}
+
+.score-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: #0f1420;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 25px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#overallScore {
+    font-size: 52px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.score-label {
+    font-size: 14px;
+    color: #8b9dc3;
+    margin-top: 12px;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 0 30px;
+    margin-bottom: 30px;
+}
+
+.metric-card {
+    background: #131826;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 22px;
+    transition: all 0.2s;
+}
+
+.metric-card:hover {
+    background: #0f1420;
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.metric-card h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 18px;
+    color: #e2e8f0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    letter-spacing: -0.2px;
+}
+
+.metric {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.metric span:first-child {
+    color: #8b9dc3;
+    font-size: 13px;
+}
+
+.metric span:last-child {
+    color: #e2e8f0;
+    font-weight: 500;
+    font-size: 13px;
+}
