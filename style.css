@@ -270,3 +270,94 @@ header p {
     font-weight: 500;
     font-size: 13px;
 }
+
+/* Progress Bars */
+.progress-bar {
+    background: rgba(255, 255, 255, 0.05);
+    height: 6px;
+    border-radius: 3px;
+    margin: 16px 0 8px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #5b6e8c;
+    transition: width 0.5s ease;
+    border-radius: 3px;
+}
+
+.score-text {
+    display: block;
+    text-align: right;
+    font-size: 11px;
+    color: #6b7c9e;
+    margin-top: 5px;
+}
+
+/* Recommendations */
+.recommendations {
+    background: #131826;
+    margin: 0 30px 30px 30px;
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.recommendations h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+}
+
+.recommendations ul {
+    list-style: none;
+}
+
+.recommendations li {
+    margin: 12px 0;
+    padding-left: 22px;
+    color: #a0b3d9;
+    font-size: 14px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.recommendations li:before {
+    content: "\2014";
+    color: #5b6e8c;
+    position: absolute;
+    left: 0;
+}
+
+/* Action Buttons */
+.actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 0 30px 30px 30px;
+}
+
+.compare-btn, .export-btn {
+    padding: 12px 28px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #1a1f2e;
+    color: #e2e8f0;
+}
+
+.compare-btn:hover, .export-btn:hover {
+    background: #2d3a4e;
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.compare-btn:active, .export-btn:active {
+    transform: translateY(0);
+}
