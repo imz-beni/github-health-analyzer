@@ -1,3 +1,4 @@
+/* Sophisticated dark muted color scheme */
 * {
     margin: 0;
     padding: 0;
@@ -12,6 +13,7 @@ body {
     color: #e2e8f0;
 }
 
+/* Main container */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -22,6 +24,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* Header */
 header {
     background: #131826;
     color: #e2e8f0;
@@ -45,6 +48,7 @@ header p {
     font-weight: 400;
 }
 
+/* Search Section */
 .search-section {
     padding: 30px;
     background: #1a1f2e;
@@ -326,7 +330,7 @@ header p {
 }
 
 .recommendations li:before {
-    content: "\2014";
+    content: "—";
     color: #5b6e8c;
     position: absolute;
     left: 0;
@@ -360,4 +364,97 @@ header p {
 
 .compare-btn:active, .export-btn:active {
     transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    header {
+        padding: 35px 20px;
+    }
+    
+    header h1 {
+        font-size: 24px;
+    }
+    
+    .search-section {
+        flex-direction: column;
+        padding: 20px;
+    }
+    
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    }
+    
+    .health-score-card {
+        margin: 20px;
+        padding: 35px 20px;
+    }
+    
+    .score-circle {
+        width: 130px;
+        height: 130px;
+    }
+    
+    #overallScore {
+        font-size: 42px;
+    }
+    
+    .info-box {
+        margin: 0 20px 20px 20px;
+    }
+    
+    .recommendations {
+        margin: 0 20px 20px 20px;
+    }
+    
+    .actions {
+        flex-direction: column;
+        padding: 0 20px 20px 20px;
+    }
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.metric-card, .health-score-card, .recommendations {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Custom scrollbar - dark theme */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #131826;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2d3a4e;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3e4e66;
+}
+
+/* Selection color */
+::selection {
+    background: #2d3a4e;
+    color: #e2e8f0;
 }
